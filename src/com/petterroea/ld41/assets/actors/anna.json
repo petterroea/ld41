@@ -1,0 +1,11 @@
+{
+	"name": "Anna",
+	"topdownSprite": "jet_above",
+	"portrait": "anna_portrait",
+	"personalityTraits": "Adventurous, excited",
+	"segments": {
+		"default": {
+			"text": "Wiggles aleirons joyfully ;)"
+		}
+	}
+}

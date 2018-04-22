@@ -1,0 +1,32 @@
+{
+	"name": "defaultScene",
+	"backdrop": "clearSky",
+	"objects": [
+		{
+			"file": "controltower_basic",
+			"dock": "bottomLeft"
+		}
+	],
+	"settings": {
+		"dim": 100.0
+	},
+	"segments": [
+		{ 	"name": "*voice*", "text": "H..hello? " },
+		{ 	"name": "THOUGHT", "text": "I open my eyes and stare at the aircraft in front of me " },
+		{ 	"dim": 0.0, "duration": 1.0 },
+		{ 	"name": "Mysterious jet", "text": "E... Excuse me! Not replying is RUDE!" },
+		{   "name": "Me", "text": "Sorry! I was sleeping!" },
+		{ 	"name": "Mysterious jet", "text": "Hmmmm, no good!\nAnyways, where are you flying today?" },
+		{   "name": "Me", "text": "I.. I don't know!" },
+		{ 	"name": "Mysterious jet", "text": "What? Every plane has somewhere to be. Do you need help?" },
+		{   "name": "Me", "text": "I guess so?" },
+		{	"acquaintance": "anna" },
+		{ 	"name": "Anna", "text": "Neat!\n\nMy name is Anna, nice to meet you!" },
+		{ 	"name": "Anna", "text": "Every day you have somewhere new to go. \nWhy not find a place to go today?" },
+		{ 	"name": "THOUGHT", "text": "Who IS this plane?" },
+		{	"transition": "flightSelect" }		
+	],
+	"actors": [
+		"anna"
+	]
+}
