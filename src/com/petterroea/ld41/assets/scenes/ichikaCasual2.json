@@ -1,0 +1,23 @@
+{
+	"name": "ichikaCasual2",
+	"backdrop": "clearSky",
+	"objects": [
+	],
+	"settings": {
+		"dim": 0.0
+	},
+	"segments": [
+		{ 	"name": "Ichika", "text": "Honestly, i'm happy i am a propeller plane" },	
+		{ 	"title": "What do you respond?", "buttons": [
+			{"text": "Why?", "segments": [
+				{ 	"name": "Ichika", "text": "It makes me me, you know?\nI'm glad i'm not a double engine jet like everyone else." }
+			]},
+			{"text": "Yeah!", "segments": [
+				{"acquaintancePoint": 4, "actor": "ichika", "message": "Ichika likes that you are being supportive" }
+			]}
+		]}
+	],
+	"actors": [
+		"ichika"
+	]
+}

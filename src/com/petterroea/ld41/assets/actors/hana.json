@@ -6,7 +6,7 @@
 	"personalityTraits": "Shy, Obnoxious",
 	"scenes": {
 		"default": {"name": "hanaDefaultScene" },
-		"casualTalk1": {"name": "hanaCasual1", "minLevel": 30, "maxLevel": 60 },
-		"casualTalk2": {"name": "hanaCasual2", "minLevel": 30, "maxLevel": 60 }
+		"casualTalk1": {"name": "hanaCasual1", "minLevel": 30},
+		"casualTalk2": {"name": "hanaCasual2", "minLevel": 30 }
 	}
 }

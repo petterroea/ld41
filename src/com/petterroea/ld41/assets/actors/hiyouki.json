@@ -7,6 +7,8 @@
 	"scenes": {
 		"default": {"name": "hiyoukiDefaultScene" },
 		"casualTalk1": {"name": "hiyoukiCasual1", "minLevel": 30, "maxLevel": 60 },
-		"casualTalk2": {"name": "hiyoukiCasual2", "isKnown": true }
+		"casualTalk2": {"name": "hiyoukiCasual2", "isKnown": true },
+		"casualTalk4": {"name": "hiyoukiCasual3", "minLevel": 35 },
+		"casualTalk3": {"name": "hiyoukiCasual4", "maxLevel": 70, "minLevelWith": {"name": "ichika", "value": 40} }
 	}
 }

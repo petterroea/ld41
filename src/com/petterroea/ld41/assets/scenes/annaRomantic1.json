@@ -1,0 +1,29 @@
+{
+	"name": "annaRomantic1",
+	"backdrop": "clearSky",
+	"objects": [
+	],
+	"settings": {
+		"dim": 0.0
+	},
+	"segments": [
+		{ 	"name": "Anna", "text": "*smiles*\nHey!" },	
+		{ 	"title": "What do you respond?", "buttons": [
+			{"text": "Nice weather today!", "segments": [
+				{"acquaintancePoint": -1, "actor": "anna", "message": "Anna feels awkward" },
+				{ 	"name": "Anna", "text": "I guess so, yes" }
+			]},
+			{"text": "I've missed you", "segments": [
+				{"acquaintancePoint": 2, "actor": "anna", "message": "Anna likes to be missed" },
+				{ 	"name": "Anna", "text": "I've missed you as well!" }
+			]},
+			{"text": "You look good today", "segments": [
+				{"acquaintancePoint": 5, "actor": "anna", "message": "Anna likes to be noticed" },
+				{ 	"name": "Anna", "text": "Thanks!" }
+			]}
+		]}
+	],
+	"actors": [
+		"anna"
+	]
+}

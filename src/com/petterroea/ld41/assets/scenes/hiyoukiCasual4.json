@@ -1,0 +1,17 @@
+{
+	"name": "hiyoukiCasual4",
+	"backdrop": "clearSky",
+	"objects": [],
+	"settings": {
+		"dim": 0.0
+	},
+	"segments": [
+		{ 	"name": "Hiyouki", "text": "You know\nWe should hang out with ichika some day!" },	
+		{   "name": "Me", "text": "You two are friends?"},
+		{ 	"name": "Hiyouki", "text": "Ofcourse!" },
+		{"acquaintancePoint": 3, "actor": "hiyouki", "message": "Hiyouki likes that you are friends with ichika" }
+	],
+	"actors": [
+		"hiyouki"
+	]
+}

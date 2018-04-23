@@ -1,0 +1,28 @@
+{
+	"name": "hiyoukiCasual3",
+	"backdrop": "clearSky",
+	"objects": [
+	],
+	"settings": {
+		"dim": 0.0
+	},
+	"segments": [
+		{ 	"name": "Hiyouki", "text": "I got fitted with new engines, w..what do you think?" },	
+		{ 	"name": "Me", "text": "Aren't they the same as usual?" },	
+		{ 	"name": "Hiyouki", "text": "No!! Whole different set of engines! \nMuch smaller." },	
+		{ 	"title": "What do you respond?", "buttons": [
+			{"text": "I don't notice it", "segments": [
+				{"acquaintancePoint": -1, "actor": "hiyouki", "message": "Hiyouki didn't like that" },
+				{ 	"name": "Hiyouki", "text": "..." }
+			]},
+			{"text": "Ah! I see!", "segments": [
+				{"acquaintancePoint": 4, "actor": "hiyouki", "message": "Hiyouki likes that you notice her" },
+				{ 	"name": "Hiyouki", "text": "Haha yeah! More energy efficient as well" },
+				{ 	"name": "Me", "text": "Neat!" }
+			]}
+		]}
+	],
+	"actors": [
+		"hiyouki"
+	]
+}

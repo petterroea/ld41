@@ -6,6 +6,7 @@
 	"personalityTraits": "Excited",
 	"scenes": {
 		"default": {"name": "ichikaDefaultScene" },
-		"casualTalk1": {"name": "ichikaCasual1", "minLevel": 30, "maxLevel": 60 }
+		"casualTalk1": {"name": "ichikaCasual1", "minLevel": 30},
+		"casualTalk2": {"name": "ichikaCasual2", "minLevel": 40}
 	}
 }

@@ -1,0 +1,25 @@
+{
+	"name": "hanaCasual3",
+	"backdrop": "clearSky",
+	"objects": [
+	],
+	"settings": {
+		"dim": 0.0
+	},
+	"segments": [
+		{ 	"name": "Hana", "text": "I got a new skirt! \nI got a new skirt!" },	
+		{ 	"title": "What do you respond?", "buttons": [
+			{"text": "You wear skirts?", "segments": [
+				{"acquaintancePoint": -1, "actor": "anna", "message": "Hana wants you to notice her" },
+				{ 	"name": "Hana", "text": "Yeah..." }
+			]},
+			{"text": "Cool.", "segments": [
+				{"acquaintancePoint": 1, "actor": "anna", "message": "Hana feels noticed" },
+				{ 	"name": "Hana", "text": "Thanks!" }
+			]}
+		]}
+	],
+	"actors": [
+		"hana"
+	]
+}
