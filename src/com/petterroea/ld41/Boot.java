@@ -51,7 +51,7 @@ public class Boot extends Applet implements Runnable, GamePuppetMaster, KeyListe
 		boot.start();
 	}
 	
-	public static boolean DEBUG = true;
+	public static boolean DEBUG = false;
 	
 	private boolean shouldRun = true;
 	private Thread gameThread = null;
