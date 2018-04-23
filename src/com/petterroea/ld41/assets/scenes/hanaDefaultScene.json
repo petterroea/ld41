@@ -1,0 +1,24 @@
+{
+	"name": "hanaDefaultScene",
+	"backdrop": "clearSky",
+	"objects": [],
+	"settings": {
+		"dim": 0.0
+	},
+	"segments": [
+		{ 	"name": "Hana", "text": "HEY! High five!" },	
+		{	"acquaintance": "hana" },
+		{ 	"title": "What do you do?", "buttons": [
+			{"text": "Ignore", "segments": [
+				{ 	"name": "Hana", "text": "..." }
+			]},
+			{"text": "Follow along", "segments": [
+				{ 	"name": "Hana", "text": "DOWN LOW! TOO SLOW! Hahahaha" },
+				{"acquaintancePoint": 3, "actor": "hana", "message": "Hana thinks you are cool" }
+			]}
+		]}
+	],
+	"actors": [
+		"hana"
+	]
+}

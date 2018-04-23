@@ -1,5 +1,5 @@
 package com.petterroea.ld41.scene;
 
-public interface SegmentCallbackHandler {
+public interface CallbackHandler {
 	public void handleCallback();
 }

@@ -1,0 +1,12 @@
+{
+	"name": "Hiyouki",
+	"internalName": "hiyouki",
+	"topdownSprite": "hiyouki_above",
+	"portrait": "hiyouki_portrait",
+	"personalityTraits": "Excited",
+	"scenes": {
+		"default": {"name": "hiyoukiDefaultScene" },
+		"casualTalk1": {"name": "hiyoukiCasual1", "minLevel": 30, "maxLevel": 60 },
+		"casualTalk2": {"name": "hiyoukiCasual2", "isKnown": true }
+	}
+}

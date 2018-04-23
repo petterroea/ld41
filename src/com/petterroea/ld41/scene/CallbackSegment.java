@@ -3,14 +3,14 @@ package com.petterroea.ld41.scene;
 import java.awt.Graphics;
 
 import com.petterroea.ld41.GamePuppetMaster;
-import com.petterroea.ld41.Segment;
+import com.petterroea.ld41.gui.Segment;
 
 public class CallbackSegment implements Segment{
 	
-	private SegmentCallbackHandler handler;
+	private CallbackHandler handler;
 	private boolean isCallbackDone = false;
 	
-	public CallbackSegment(SegmentCallbackHandler handler) {
+	public CallbackSegment(CallbackHandler handler) {
 		this.handler = handler;
 	}
 
@@ -50,6 +50,11 @@ public class CallbackSegment implements Segment{
 	public boolean isAutomationSegment() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+	@Override
+	public void mouseReleased() {
+		
 	}
 
 }

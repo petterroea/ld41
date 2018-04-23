@@ -1,0 +1,42 @@
+{
+	"name": "ichikaCasual1",
+	"backdrop": "clearSky",
+	"objects": [],
+	"settings": {
+		"dim": 0.0
+	},
+	"segments": [
+		{ 	"name": "Ichika", "text": "Where will the wind take you today?" },	
+		{ "name": "Me", "text": "Whereever my jet engine wants to"},
+		{ 	"name": "Ichika", "text": "You jet-powered aircraft are so entitled!\nY'all should try flying on a single propeller some time." },
+		{ 	"title": "Response", "buttons": [
+			{"text": "Entitlement?", "segments": [
+				{ 	"name": "Ichika", "text": "..." },
+				{ 	"name": "Ichika", "text": "You just proved my point" },
+				{"acquaintancePoint": -2, "actor": "ichika", "message": "Ichika didn't like that" }
+			]},
+			{"text": "I have the engines i am made with", "segments": [
+				{ 	"name": "Ichika", "text": "Fair enough. Still!" },
+				{ 	"name": "Me", "text": "Some day, maybe i can switch.." },
+				{ 	"name": "Ichika", "text": "..or i can get jet engines?" },
+				{ 	"title": "Response", "buttons": [
+					{"text": "Man, that would be hillarious", "segments": [
+						{ 	"name": "Ichika", "text": "Are you making fun of me again? \nHmpf, seriously..." },
+						{"acquaintancePoint": 0, "actor": "ichika", "message": "Ichika feels small" },
+						{ 	"name": "Me", "text": "Nono!" },
+						{ 	"name": "Me", "text": "I just thought that would be amazing!" },
+						{ 	"name": "Ichika", "text": "Fair enough" },
+						{"acquaintancePoint": 2, "actor": "ichika", "message": "Ichika is ok with you" }
+					]},
+					{"text": "Sure!", "segments": [
+						{ 	"name": "Ichika", "text": "Right!!" },
+						{"acquaintancePoint": 3, "actor": "ichika", "message": "Ichika likes your attitude" }
+					]}
+				]}
+			]}
+		]}
+	],
+	"actors": [
+		"ichika"
+	]
+}

@@ -2,6 +2,7 @@ package com.petterroea.ld41;
 
 import java.applet.Applet;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -17,8 +18,13 @@ import javax.swing.JOptionPane;
 
 import com.petterroea.ld41.LoadingThread.LoadingState;
 import com.petterroea.ld41.assets.AssetManager;
+import com.petterroea.ld41.gui.LoadingScreen;
+import com.petterroea.ld41.gui.Screen;
+import com.petterroea.ld41.gui.Segment;
+import com.petterroea.ld41.gui.TextSegment;
+import com.petterroea.ld41.romance.AcquaintanceManager;
 import com.petterroea.ld41.scene.CallbackSegment;
-import com.petterroea.ld41.scene.SegmentCallbackHandler;
+import com.petterroea.ld41.scene.CallbackHandler;
 
 public class Boot extends Applet implements Runnable, GamePuppetMaster, KeyListener, MouseListener, MouseMotionListener{
 	
@@ -39,10 +45,13 @@ public class Boot extends Applet implements Runnable, GamePuppetMaster, KeyListe
 		
 		frame.setVisible(true);
 		
-		frame.setLocation(1920+100, 100);
+		if(DEBUG)
+			frame.setLocation(1920+100, 100);
 		
 		boot.start();
 	}
+	
+	public static boolean DEBUG = false;
 	
 	private boolean shouldRun = true;
 	private Thread gameThread = null;
@@ -57,10 +66,21 @@ public class Boot extends Applet implements Runnable, GamePuppetMaster, KeyListe
 	private LoadingThread generation;
 	private FlightWorld flightWorld;
 	private boolean shouldTryTransition = true;
+	private Vector2 lastMousePos = new Vector2(0, 0);
+	private static boolean mouseButtonState = false;
+	
+	//Acquaintance dialog stuff
+	private String acquaintanceDialogMsg = null;
+	private Actor acquaintanceDialogActor = null;
+	private long acquaintanceDialogLifetime = 0;
+	
+	public static final Color KYUNKYUNCOLOR = new Color(255, 84, 255);
 	
 	@Override
 	public void start() {
 		this.addKeyListener(this);
+		this.addMouseListener(this);
+		this.addMouseMotionListener(this);
 		this.requestFocus();
 		gameThread = new Thread(this);
 		
@@ -68,6 +88,8 @@ public class Boot extends Applet implements Runnable, GamePuppetMaster, KeyListe
 		flightWorld = new FlightWorld(this);
 		generation = new LoadingThread(flightWorld);
 		generation.generate();
+		
+		AcquaintanceManager.SINGLETON = new AcquaintanceManager(this);
 		
 		//Start the game
 		gameThread.start();
@@ -93,7 +115,7 @@ public class Boot extends Applet implements Runnable, GamePuppetMaster, KeyListe
 					segments.clear();
 					shouldTryTransition = false;
 					playSegment(new Segment[] {new TextSegment("System-chan", "Woah, beat me to it!\nPlease wait for the game to properly load\n\nJust a sec! Promise!"), 
-							new CallbackSegment(new SegmentCallbackHandler() {
+							new CallbackSegment(new CallbackHandler() {
 								@Override
 								public void handleCallback() {
 									shouldTryTransition = true;
@@ -102,6 +124,7 @@ public class Boot extends Applet implements Runnable, GamePuppetMaster, KeyListe
 				} else {
 					currentScreen = nextScreen;
 					nextScreen = null;
+					currentScreen.onTransition();
 				}
 			}
 			if(backBuffer == null || this.getWidth()/internalScaleFactor != backBuffer.getWidth()|| this.getHeight()/internalScaleFactor != backBuffer.getHeight() ) {
@@ -150,43 +173,74 @@ public class Boot extends Applet implements Runnable, GamePuppetMaster, KeyListe
 			}
 			long postRender = System.nanoTime();
 			
+			//Draw acquaintance dialog
+			if(acquaintanceDialogActor != null) {
+				long drawDuration = System.currentTimeMillis() - acquaintanceDialogLifetime;
+				BufferedImage hud = AssetManager.getImage("hud_text");
+				g.setColor(Color.WHITE);
+				g.setFont(g.getFont().deriveFont(Font.PLAIN, 12f));
+				if(drawDuration < 1000L) {
+					int offsetPos = (int)(drawDuration)/10;
+					g.drawImage(hud, 0, -hud.getHeight()-50+offsetPos, null);
+					g.drawImage(acquaintanceDialogActor.getPortrait(), 10, offsetPos-140, 96, 96,  null);
+					g.drawString(acquaintanceDialogMsg, 130, offsetPos-70);
+					
+				} else if(drawDuration > 5000L) {
+					int offsetPos = (int)(1000L-(drawDuration-5000L))/10;
+					g.drawImage(hud, 0, -hud.getHeight()-50+offsetPos, null);
+					g.drawImage(acquaintanceDialogActor.getPortrait(), 10, offsetPos-140, 96, 96, null);
+					g.drawString(acquaintanceDialogMsg, 130, offsetPos-70);
+					if(drawDuration > 6000L) {
+						acquaintanceDialogActor = null;
+					}
+				} else {
+					int offsetPos = (int)(1000)/10;
+					g.drawImage(hud, 0, -hud.getHeight()-50+offsetPos, null);
+					g.drawImage(acquaintanceDialogActor.getPortrait(), 10, offsetPos-140, 96, 96, null);
+					g.drawString(acquaintanceDialogMsg, 130, offsetPos-70);
+				}
+			}
+			
 			//End
 			
-			//Push analytics
-			renderTimes.add((int)(postRender-postLogic));
-			logicTimes.add((int)(postLogic-preLogic));
-			if(logicTimes.size()>60) {
-				logicTimes.removeFirst();
-			}
-			if(renderTimes.size()>60) {
-				renderTimes.removeFirst();
-			}
-			
-			//Draw analytics
-			Iterator<Integer> render = renderTimes.iterator();
-			Iterator<Integer> logic = logicTimes.iterator();
-			
-			int analyticsIndex = 0;
-			while(render.hasNext() && logic.hasNext()) {
-				int nowRender = render.next();
-				int nowLogic = logic.next();
-				float renderMillis = (float)nowRender/1000f/1000f;
-				float logicMillis = (float)nowLogic/1000f/1000f;
-				if(nowRender > nowLogic) {
-					g.setColor(Color.red);
-					g.drawLine(analyticsIndex, backBuffer.getHeight(), analyticsIndex, backBuffer.getHeight()-(int)renderMillis);
-					g.setColor(Color.green);
-					g.drawLine(analyticsIndex, backBuffer.getHeight(), analyticsIndex, backBuffer.getHeight()-(int)logicMillis);
-				} else {
-					g.setColor(Color.green);
-					g.drawLine(analyticsIndex, backBuffer.getHeight(), analyticsIndex, backBuffer.getHeight()-(int)logicMillis);
-					g.setColor(Color.red);
-					g.drawLine(analyticsIndex, backBuffer.getHeight(), analyticsIndex, backBuffer.getHeight()-(int)renderMillis);
+			if(DEBUG) {
+				//Push analytics
+				renderTimes.add((int)(postRender-postLogic));
+				logicTimes.add((int)(postLogic-preLogic));
+				if(logicTimes.size()>60) {
+					logicTimes.removeFirst();
 				}
-				g.setColor(Color.black);
-				g.drawLine(0, backBuffer.getHeight()-60, 60, backBuffer.getHeight()-60);
-				analyticsIndex++;
+				if(renderTimes.size()>60) {
+					renderTimes.removeFirst();
+				}
+				
+				//Draw analytics
+				Iterator<Integer> render = renderTimes.iterator();
+				Iterator<Integer> logic = logicTimes.iterator();
+				
+				int analyticsIndex = 0;
+				while(render.hasNext() && logic.hasNext()) {
+					int nowRender = render.next();
+					int nowLogic = logic.next();
+					float renderMillis = (float)nowRender/1000f/1000f;
+					float logicMillis = (float)nowLogic/1000f/1000f;
+					if(nowRender > nowLogic) {
+						g.setColor(Color.red);
+						g.drawLine(analyticsIndex, backBuffer.getHeight(), analyticsIndex, backBuffer.getHeight()-(int)renderMillis);
+						g.setColor(Color.green);
+						g.drawLine(analyticsIndex, backBuffer.getHeight(), analyticsIndex, backBuffer.getHeight()-(int)logicMillis);
+					} else {
+						g.setColor(Color.green);
+						g.drawLine(analyticsIndex, backBuffer.getHeight(), analyticsIndex, backBuffer.getHeight()-(int)logicMillis);
+						g.setColor(Color.red);
+						g.drawLine(analyticsIndex, backBuffer.getHeight(), analyticsIndex, backBuffer.getHeight()-(int)renderMillis);
+					}
+					g.setColor(Color.black);
+					g.drawLine(0, backBuffer.getHeight()-60, 60, backBuffer.getHeight()-60);
+					analyticsIndex++;
+				}
 			}
+			
 			
 			//Draw loading bar
 			
@@ -231,10 +285,11 @@ public class Boot extends Applet implements Runnable, GamePuppetMaster, KeyListe
 
 	@Override
 	public void playSegment(Segment[] segments) {
-		if(this.segments.size() != 0) {
+		/*if(this.segments.size() != 0) {
 			JOptionPane.showMessageDialog(null, "Failure: text segment forced when one is already playing");
 			throw new RuntimeException("text segment already showing");
-		}
+		}*/
+		this.segments.clear();
 		for(Segment segment : segments) {
 			this.segments.add(segment);
 		}
@@ -257,26 +312,50 @@ public class Boot extends Applet implements Runnable, GamePuppetMaster, KeyListe
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {
+		if(segments.size() != 0)
+			return;
 		currentScreen.keyReleased(e);
 	}
 	@Override
 	public void mouseDragged(MouseEvent e) {
+		if(segments.size() != 0)
+			return;
 		currentScreen.mouseDragged(e);
 	}
 	@Override
 	public void mouseMoved(MouseEvent e) {
+		lastMousePos.X = e.getX()/internalScaleFactor;
+		lastMousePos.Y = e.getY()/internalScaleFactor;
 		currentScreen.mouseMoved(e);
 	}
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		if(segments.size() != 0)
+			return;
 		currentScreen.mouseClicked(e);
 	}
 	@Override
 	public void mousePressed(MouseEvent e) {
-		currentScreen.mousePressed(e);
+		mouseButtonState = true;
+		if(segments.size() != 0) {
+			Segment segment = segments.getFirst();
+			
+			if(segment.hasEnded()) {
+				segments.removeFirst();
+			} else {
+				segment.forceDone();
+			}
+		} else {
+			currentScreen.mousePressed(e);
+		}
 	}
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		mouseButtonState = false;
+		if(segments.size() != 0) {
+			segments.getFirst().mouseReleased();
+			return;
+		}
 		currentScreen.mouseReleased(e);
 	}
 	@Override
@@ -291,5 +370,29 @@ public class Boot extends Applet implements Runnable, GamePuppetMaster, KeyListe
 	public FlightWorld getFlightWorld() {
 		// TODO Auto-generated method stub
 		return flightWorld;
+	}
+	@Override
+	public Vector2 getGameMousePosition() {
+		// TODO Auto-generated method stub
+		return lastMousePos;
+	}
+	@Override
+	public boolean isMouseDown() {
+		// TODO Auto-generated method stub
+		return mouseButtonState;
+	}
+	@Override
+	public void showAcquaintanceDialog(String actorName, String string) {
+		acquaintanceDialogActor = AssetManager.getActor(actorName.toLowerCase());
+		acquaintanceDialogMsg = string;
+		acquaintanceDialogLifetime = System.currentTimeMillis();
+		System.out.println("Got acquaintance for actor " + actorName);
+	}
+	@Override
+	public void putSegmentsInFront(Segment[] segments) {
+		this.segments.removeFirst();
+		for(int i = segments.length-1; i >= 0; i--) {
+			this.segments.addFirst(segments[i]);
+		}
 	}
 }

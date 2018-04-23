@@ -1,0 +1,16 @@
+{
+	"name": "hanaCasual1",
+	"backdrop": "clearSky",
+	"objects": [],
+	"settings": {
+		"dim": 0.0
+	},
+	"segments": [
+		{ 	"name": "Hana", "text": "HEEEEEY! \n\nBesties!" },	
+		{ "name": "Me", "text": "..."},
+		{"acquaintancePoint": 1, "actor": "hana", "message": "Hana likes attention" }
+	],
+	"actors": [
+		"hana"
+	]
+}

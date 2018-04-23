@@ -1,7 +1,9 @@
-package com.petterroea.ld41;
+package com.petterroea.ld41.gui;
 
 import java.awt.Color;
 import java.awt.Graphics;
+
+import com.petterroea.ld41.GamePuppetMaster;
 
 public interface Segment {
 	public void render(Graphics g, int beginOffset, GamePuppetMaster master);
@@ -15,4 +17,6 @@ public interface Segment {
 	public boolean hasStarted() ;
 	
 	public boolean isAutomationSegment();
+
+	public void mouseReleased();
 }

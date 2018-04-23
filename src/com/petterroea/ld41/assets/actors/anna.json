@@ -1,11 +1,13 @@
 {
 	"name": "Anna",
-	"topdownSprite": "jet_above",
+	"internalName": "anna",
+	"topdownSprite": "anna_top",
 	"portrait": "anna_portrait",
 	"personalityTraits": "Adventurous, excited",
-	"segments": {
-		"default": {
-			"text": "Wiggles aleirons joyfully ;)"
-		}
+	"scenes": {
+		"default": {"name": "annaDefaultScene" },
+		"casualTalk1": {"name": "annaCasual1", "minLevel": 30, "maxLevel": 60 },
+		"bitch1": {"name": "annaBitch1", "minLevelWith": {"name": "hana", "value": 50},
+		"casualTalk2": {"name": "annaCasual2", "minLevel": 30, "maxLevel": 70, "maxLevelWith": {"name": "hana", "value": 30}}
 	}
 }

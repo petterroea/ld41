@@ -1,8 +1,10 @@
-package com.petterroea.ld41;
+package com.petterroea.ld41.gui;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
+import com.petterroea.ld41.GamePuppetMaster;
+import com.petterroea.ld41.LoadingThread;
 import com.petterroea.ld41.LoadingThread.LoadingState;
 
 public class LoadingScreen extends Screen{

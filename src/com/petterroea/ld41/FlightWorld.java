@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
@@ -14,27 +15,68 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 
 public class FlightWorld {
-	public final int WIDTH = 5000;
-	public final int HEIGHT = 5000;
+	public static final int WIDTH = 5000;
+	public static final int HEIGHT = 5000;
 	
 	private BufferedImage image;
 	private int[] heightValues = new int[WIDTH*HEIGHT];
 	
-	private LinkedList<City> cities = new LinkedList<City>();
+	private ArrayList<City> cities = new ArrayList<City>();
 	
 	private float regionScale = 5;
 	private GamePuppetMaster master;
+	
+	//Current whereabouts of the player
+	private City position;
 	
 	public FlightWorld(GamePuppetMaster master) {
 		this.master = master;
 	}
 	
+	public Route generateRoute() {
+		Route route = new Route();
+		
+		Random rand = new Random();
+		
+		City start = cities.get(rand.nextInt(cities.size()));
+		route.addWaypoint(start);
+		
+		int nextIndex = rand.nextInt(cities.size()-1);
+		if(cities.get(nextIndex) == start) {
+			nextIndex++;
+		}
+		route.addWaypoint(cities.get(nextIndex));
+		
+		return route;
+	}
+	
+	public Route generateRoute(Waypoint start) {
+		Route route = new Route();
+		
+		Random rand = new Random();
+		
+		route.addWaypoint(start);
+		
+		int nextIndex = rand.nextInt(cities.size()-1);
+		if(cities.get(nextIndex) == start) {
+			nextIndex++;
+		}
+		route.addWaypoint(cities.get(nextIndex));
+		
+		return route;
+	}
+	
 	public void render(Graphics g, float x, float y, float scale, int dx1, int dy1, int dx2, int dy2) {
 		float ratio = (float)(dy2-dy1)/(float)(dx2-dx1);
+		
+		
+		
 		int sx1 = (int)((x*WIDTH)-(WIDTH/2)*scale);
-		int sy1 = (int)((y*HEIGHT)-(HEIGHT/2)*scale);
+		int sy1 = (int)((y*HEIGHT)-(HEIGHT/2)*scale*ratio);
+		
 		int sx2 = (int)((x*WIDTH)+(WIDTH/2)*scale);
-		int sy2 = (int)((y*HEIGHT/2)+(HEIGHT/2)*scale);
+		int sy2 = (int)((y*HEIGHT)+(HEIGHT/2)*scale*ratio);
+		
 		boolean didFinish = g.drawImage(image, 
 								//Viewport
 								dx1, dy1, dx2, dy2,
@@ -42,16 +84,19 @@ public class FlightWorld {
 								sx1, sy1, sx2, sy2, 
 								
 								null);
+		
 		g.setColor(Color.white);
 		Rectangle visibleRect = new Rectangle(sx1, sy1, sx2-sx1, sy2-sy1);
+		
 		float scaleX = (float)(dx2-dx1)/(float)(sx2-sx1);
 		float scaleY = (float)(dy2-dy1)/(float)(sy2-sy1);
+		
 		for(City c : cities) {
 			if(visibleRect.contains(c.getX(), c.getY())) {
-				int drawX = (int)((c.getX()-sx1+dx1)*scaleX);
-				int drawY = (int)((c.getY()-sy1+dy1)*scaleY );
-				g.drawLine(drawX-1, drawY, drawX+1, drawY);
-				g.drawLine(drawX, drawY-1, drawX, drawY+1);
+				int drawX = (int)((c.getX()-sx1)*scaleX)+dx1;
+				int drawY = (int)((c.getY()-sy1)*scaleY)+dy1;
+				g.drawLine(drawX-2, drawY, drawX+2, drawY);
+				g.drawLine(drawX, drawY-2, drawX, drawY+2);
 				g.drawString(c.getName(), drawX, drawY);
 			}
 		}
@@ -87,6 +132,7 @@ public class FlightWorld {
 				simplex += noise2.eval(x/1500.0,  y/1500.0)*2;
 				
 				simplex += noise.eval(x/500.0*regionScale, y/500.0*regionScale);
+				simplex += noise2.eval(x/300.0*regionScale, y/300.0*regionScale)*0.5;
 				
 				simplex = simplex / 4.0;
 				
@@ -181,6 +227,7 @@ public class FlightWorld {
 			g.drawString(c.getName(), c.getX(), c.getY());
 		}*/
 		LoadingThread.LoadingProgress = 100f;
+		/*
 		try {
 			System.out.println("Writing to file");
 			ImageIO.write(image, "PNG", new File("generated.png"));
@@ -189,7 +236,7 @@ public class FlightWorld {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("Done!");
+		System.out.println("Done!");*/
 	}
 	Random rand = new Random();
 	private void addAirports() {
@@ -239,5 +286,68 @@ public class FlightWorld {
 	public Image getFullImage() {
 		// TODO Auto-generated method stub
 		return image;
+	}
+
+	public Waypoint getCurrentPosition() {
+		if(position == null) {
+			City largest = cities.get(0);
+			for(City c : cities) {
+				if(c.getPopulation() > largest.getPopulation())
+					largest = c;
+			}
+			position = largest;
+		}
+		return position;
+	}
+
+	public void renderRoute(Graphics g, Color color, Route route, float x, float y, float scale, int dx1, int dy1, int dx2, int dy2) {
+		float ratio = (float)(dy2-dy1)/(float)(dx2-dx1);
+		
+		int sx1 = (int)((x*WIDTH)-(WIDTH/2)*scale);
+		int sy1 = (int)((y*HEIGHT)-(HEIGHT/2)*scale*ratio);
+		
+		int sx2 = (int)((x*WIDTH)+(WIDTH/2)*scale);
+		int sy2 = (int)((y*HEIGHT)+(HEIGHT/2)*scale*ratio);
+		
+		
+		g.setColor(color);
+		
+		float scaleX = (float)(dx2-dx1)/(float)(sx2-sx1);
+		float scaleY = (float)(dy2-dy1)/(float)(sy2-sy1);
+		
+		Iterator<Waypoint> waypoints = route.points();
+		
+		Waypoint firstWaypoint = waypoints.next();
+		while(waypoints.hasNext()) {
+			Waypoint nextWaypoint = waypoints.next();
+			
+			int drawXPrev = (int)((firstWaypoint.getX()-sx1)*scaleX)+dx1;
+			int drawYPrev = (int)((firstWaypoint.getY()-sy1)*scaleY)+dy1;
+			
+			int drawXNext = (int)((nextWaypoint.getX()-sx1)*scaleX)+dx1;
+			int drawYNext = (int)((nextWaypoint.getY()-sy1)*scaleY)+dy1;
+			
+			g.drawLine(drawXPrev, drawYPrev, drawXNext, drawYNext);
+			firstWaypoint = nextWaypoint;
+		}
+	}
+
+	public Vector2 transformLocation(int toTransformX, int toTransformY, float x, float y, float scale, int dx1, int dy1, int dx2, int dy2) {
+		float ratio = (float)(dy2-dy1)/(float)(dx2-dx1);
+		
+		int sx1 = (int)((x*WIDTH)-(WIDTH/2)*scale);
+		int sy1 = (int)((y*HEIGHT)-(HEIGHT/2)*scale*ratio);
+		
+		int sx2 = (int)((x*WIDTH)+(WIDTH/2)*scale);
+		int sy2 = (int)((y*HEIGHT)+(HEIGHT/2)*scale*ratio);
+		
+		
+		float scaleX = (float)(dx2-dx1)/(float)(sx2-sx1);
+		float scaleY = (float)(dy2-dy1)/(float)(sy2-sy1);
+		
+		int transformedX = (int)((toTransformX-sx1)*scaleX)+dx1;
+		int transformedY = (int)((toTransformY-sy1)*scaleY)+dy1;
+		
+		return new Vector2(transformedX, transformedY);
 	}
 }

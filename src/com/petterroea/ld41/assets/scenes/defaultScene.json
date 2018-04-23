@@ -24,7 +24,7 @@
 		{ 	"name": "Anna", "text": "Neat!\n\nMy name is Anna, nice to meet you!" },
 		{ 	"name": "Anna", "text": "Every day you have somewhere new to go. \nWhy not find a place to go today?" },
 		{ 	"name": "THOUGHT", "text": "Who IS this plane?" },
-		{	"transition": "flightSelect" }		
+		{	"transitionScreen": "flightSelect" }		
 	],
 	"actors": [
 		"anna"

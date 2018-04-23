@@ -1,0 +1,17 @@
+{
+	"name": "hanaCasual1",
+	"backdrop": "clearSky",
+	"objects": [],
+	"settings": {
+		"dim": 0.0
+	},
+	"segments": [
+		{ 	"name": "Hana", "text": "What's up?" },	
+		{ "name": "Me", "text": "The sky"},
+		{ 	"name": "Hana", "text": "HAHAHAHAHAHAHAHAHAHAHAH\nHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHA\nHAHAHAHAHAHAHAHAHAHAHA\nhahahahahahaa......." },	
+		{"acquaintancePoint": 2, "actor": "hana", "message": "Hana thinks you are funny" }
+	],
+	"actors": [
+		"hana"
+	]
+}

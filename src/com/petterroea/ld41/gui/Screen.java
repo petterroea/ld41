@@ -1,4 +1,4 @@
-package com.petterroea.ld41;
+package com.petterroea.ld41.gui;
 
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
@@ -10,6 +10,10 @@ public abstract class Screen {
 	}
 	
 	public void load() {
+		
+	}
+	
+	public void onTransition() {
 		
 	}
 	

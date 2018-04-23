@@ -1,0 +1,17 @@
+{
+	"name": "annaBitch1",
+	"backdrop": "clearSky",
+	"objects": [
+	],
+	"settings": {
+		"dim": 0.0
+	},
+	"segments": [
+		{ 	"name": "Anna", "text": "..." },	
+		{ 	"name": "Me", "text": "Hmm..." },
+		{"acquaintancePoint": -1, "actor": "anna", "message": "Anna doesn't like that you talk to Hana" }
+	],
+	"actors": [
+		"anna"
+	]
+}

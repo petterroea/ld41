@@ -1,0 +1,11 @@
+{
+	"name": "Ichika",
+	"internalName": "ichika",
+	"topdownSprite": "ichika_above",
+	"portrait": "ichika_portrait",
+	"personalityTraits": "Excited",
+	"scenes": {
+		"default": {"name": "ichikaDefaultScene" },
+		"casualTalk1": {"name": "ichikaCasual1", "minLevel": 30, "maxLevel": 60 }
+	}
+}

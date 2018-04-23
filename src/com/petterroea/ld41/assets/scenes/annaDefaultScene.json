@@ -1,0 +1,24 @@
+{
+	"name": "annaDefaultScene",
+	"backdrop": "clearSky",
+	"objects": [],
+	"settings": {
+		"dim": 0.0
+	},
+	"segments": [
+		{ 	"name": "Anna", "text": "Hey! What's up!" },	
+		{ 	"title": "What do you respond?", "buttons": [
+			{"text": "Not much", "segments": [
+				{ 	"name": "Anna", "text": "Haha, i see!" },
+				{ 	"name": "Anna", "text": "See you!" }
+			]},
+			{"text": "Flying", "segments": [
+				{"acquaintancePoint": 5, "actor": "anna", "message": "Anna thinks you are funny" },
+				{ 	"name": "Anna", "text": "*wiggles ailerons cheerfully*" }
+			]}
+		]}
+	],
+	"actors": [
+		"anna"
+	]
+}

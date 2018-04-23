@@ -1,0 +1,19 @@
+{
+	"name": "hiyoukiCasual1",
+	"backdrop": "clearSky",
+	"objects": [],
+	"settings": {
+		"dim": 0.0
+	},
+	"segments": [
+		{ 	"name": "Hiyouki", "text": "Hey" },	
+		{   "name": "Me", "text": "How are things?"},
+		{ 	"name": "Hiyouki", "text": "Fine i guess...\nI'm just back from maintenance, it's always awkward needing my own hangar..." },	
+		{   "name": "Me", "text": "VIP suite!"},
+		{ 	"name": "Hiyouki", "text": "I guess that's one way to put it..." },	
+		{"acquaintancePoint": 3, "actor": "hiyouki", "message": "Hiyouki accepts you" }
+	],
+	"actors": [
+		"hiyouki"
+	]
+}

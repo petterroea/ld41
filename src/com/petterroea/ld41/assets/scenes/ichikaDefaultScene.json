@@ -1,0 +1,28 @@
+{
+	"name": "ichikaDefaultScene",
+	"backdrop": "clearSky",
+	"objects": [],
+	"settings": {
+		"dim": 0.0
+	},
+	"segments": [
+		{ 	"name": "Ichika", "text": "*makes propeller sounds*" },	
+		{	"acquaintance": "ichika" },
+		{ 	"title": "What do you do?", "buttons": [
+			{"text": "What's up, propellerhead?", "segments": [
+				{ 	"name": "Ichika", "text": "Hey! I..It's not like i can do anything about it." },
+				{ 	"name": "Me", "text": "I don't mind you being a propeller plane!" },
+				{ 	"name": "Ichika", "text": "Really?" },
+				{ 	"name": "Me", "text": "Yea!" },
+				{"acquaintancePoint": 3, "actor": "ichika", "message": "Ichika accepts you" }
+			]},
+			{"text": "*make jet sounds*", "segments": [
+				{ 	"name": "Ichika", "text": "*unintelligible sentence*" },
+				{"acquaintancePoint": -1, "actor": "ichika", "message": "Ichika doesn't like being bullied by bigger craft" }
+			]}
+		]}
+	],
+	"actors": [
+		"ichika"
+	]
+}

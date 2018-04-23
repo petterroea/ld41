@@ -1,0 +1,25 @@
+{
+	"name": "hiyoukiDefaultScene",
+	"backdrop": "clearSky",
+	"objects": [],
+	"settings": {
+		"dim": 0.0
+	},
+	"segments": [
+		{ 	"name": "Hiyouki", "text": "*flies cheerfully*" },	
+		{	"acquaintance": "hiyouki" },
+		{ 	"name": "THOUGHT", "text": "What a majestic thing" },	
+		{ 	"name": "Me", "text": "Hey!" },	
+		{ 	"name": "Hiyouki", "text": "H...wah...hey!" },	
+		{ 	"name": "Me", "text": "Did i scare you?" },	
+		{ 	"name": "Hiyouki", "text": "No!\n                 \nNever!         \n..." },	
+		{ 	"name": "Me", "text": "..." },	
+		{ 	"name": "Me", "text": "Anyways, Who are you?" },	
+		{ 	"name": "Hiyouki", "text": "Hiyouki" },	
+		{ 	"name": "Me", "text": "Nice to meet you!" },	
+		{"acquaintancePoint": 1, "actor": "hiyouki", "message": "Hiyouki is unsure" }
+	],
+	"actors": [
+		"hiyouki"
+	]
+}

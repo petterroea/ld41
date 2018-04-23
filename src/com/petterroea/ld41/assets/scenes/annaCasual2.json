@@ -1,0 +1,17 @@
+{
+	"name": "annaCasual2",
+	"backdrop": "clearSky",
+	"objects": [
+	],
+	"settings": {
+		"dim": 0.0
+	},
+	"segments": [
+		{ 	"name": "Anna", "text": "Man, i've been having trouble with Hana lately...." },	
+		{ 	"name": "Me", "text": "Hmm..." },
+		{"acquaintancePoint": 2, "actor": "anna", "message": "Anna likes to be listened to" }
+	],
+	"actors": [
+		"anna"
+	]
+}

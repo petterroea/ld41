@@ -1,0 +1,28 @@
+{
+	"name": "annaCasual1",
+	"backdrop": "clearSky",
+	"objects": [
+	],
+	"settings": {
+		"dim": 0.0
+	},
+	"segments": [
+		{ 	"name": "Anna", "text": "Long time no see!" },	
+		{ 	"name": "Me", "text": "Haha, thanks! I was thinking the same!\nWhat have you been up to lately?" },	
+		{ 	"name": "Anna", "text": "Not much.\n\nHey, the weather down south is pretty bad, \ni hope you aren't planning on staying there the next days" },	
+		{ 	"title": "What do you respond?", "buttons": [
+			{"text": "Whatever, weather is weather", "segments": [
+				{"acquaintancePoint": -1, "actor": "anna", "message": "Anna doesn't like to not be taken seriously" },
+				{ 	"name": "Anna", "text": "Cool" }
+			]},
+			{"text": "Thanks! I'l try to avoid it", "segments": [
+				{"acquaintancePoint": 4, "actor": "anna", "message": "Anna likes to be taken seriously" },
+				{ 	"name": "Anna", "text": "Haha! Yeah, i guess. I mean, it's not bad or anything...." },
+				{ 	"name": "Me", "text": "I'l try my best" }
+			]}
+		]}
+	],
+	"actors": [
+		"anna"
+	]
+}

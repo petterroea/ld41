@@ -9,12 +9,14 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import com.petterroea.ld41.Actor;
-import com.petterroea.ld41.FlightSelectScreen;
 import com.petterroea.ld41.GamePuppetMaster;
-import com.petterroea.ld41.Screen;
-import com.petterroea.ld41.Segment;
-import com.petterroea.ld41.TextSegment;
 import com.petterroea.ld41.assets.AssetManager;
+import com.petterroea.ld41.gui.FlightScreen;
+import com.petterroea.ld41.gui.FlightSelectScreen;
+import com.petterroea.ld41.gui.Screen;
+import com.petterroea.ld41.gui.Segment;
+import com.petterroea.ld41.gui.TextSegment;
+import com.petterroea.ld41.romance.AcquaintanceManager;
 
 public class ScenePlayScreen extends Screen {
 	private String currentSceneName;
@@ -29,14 +31,25 @@ public class ScenePlayScreen extends Screen {
 	LinkedList<SceneObject> objects = new LinkedList<SceneObject>();
 	LinkedList<Actor> actors = new LinkedList<Actor>();
 	
+	private FlightScreen flightScreen;
+	
 	public ScenePlayScreen(String sceneName, GamePuppetMaster puppetMaster) {
 		this.puppetMaster = puppetMaster;
 		this.currentSceneName = sceneName;
 		transitionScene(sceneName);
 	}
 	
+	public ScenePlayScreen(FlightScreen screen, GamePuppetMaster master, String scene) {
+		this.flightScreen = screen;
+		this.puppetMaster = master;
+		this.currentSceneName = scene;
+		transitionScene(currentSceneName);
+	}
+
 	private void transitionScene(String sceneName) {
+		System.out.println("Transitioning to " + sceneName);
 		JSONObject sceneObj = AssetManager.getScene(sceneName);
+		System.out.println("Scene is null? " + (sceneObj == null));
 		backdrop = AssetManager.getImage((String)sceneObj.get("backdrop"));
 		objects.clear();
 		actors.clear();
@@ -50,36 +63,19 @@ public class ScenePlayScreen extends Screen {
 		//Parse sequences
 		
 		LinkedList<Segment> segments = new LinkedList<Segment>();
-		
 		JSONArray segmentList = (JSONArray) sceneObj.get("segments");
+		Segment[] parsedSegmentList = parseSegments(segmentList);
+		for(Segment s : parsedSegmentList) {
+			segments.add(s);
+		}
 		
-		for(Object o: segmentList) {
-			JSONObject obj = (JSONObject)o;
-			if(obj.containsKey("name")) { //Normal dialouge
-				segments.add(new TextSegment((String)obj.get("name"), (String)obj.get("text")));
-			}
-			else if(obj.containsKey("dim")) {
-				segments.add(new CallbackSegment(new SegmentCallbackHandler() {
-					@Override
-					public void handleCallback() {
-						dimAnimation = new Animation(dim, (float)((double)obj.get("dim")), (float)((double)obj.get("duration")) );
-					}
-				}));
-			} else if(obj.containsKey("transition")) {
-				String target = (String) obj.get("transition");
-				switch(target.toLowerCase()) {
-					case "flightselect":
-						segments.add(new CallbackSegment(new SegmentCallbackHandler() {
-							@Override
-							public void handleCallback() {
-								puppetMaster.transitionScreen(new FlightSelectScreen(puppetMaster));
-							}
-						}));
-						break;
-					default:
-						throw new RuntimeException("request for transition to unknown screen");
+		if(flightScreen != null) {
+			segments.add(new CallbackSegment(new CallbackHandler() {
+				@Override
+				public void handleCallback() {
+					puppetMaster.transitionScreen(flightScreen);
 				}
-			}
+			}));
 		}
 		
 		//Parse objects
@@ -101,6 +97,62 @@ public class ScenePlayScreen extends Screen {
 		Segment[] segmentArray = new Segment[segments.size()];
 		segmentArray = segments.toArray(segmentArray);
 		puppetMaster.playSegment(segmentArray);
+	}
+
+	public Segment[] parseSegments(JSONArray segmentList) {
+		LinkedList<Segment> segments = new LinkedList<Segment>();
+		
+		for(Object o: segmentList) {
+			JSONObject obj = (JSONObject)o;
+			if(obj.containsKey("name")) { //Normal dialouge
+				segments.add(new TextSegment((String)obj.get("name"), (String)obj.get("text")));
+			}
+			else if(obj.containsKey("dim")) {
+				segments.add(new CallbackSegment(new CallbackHandler() {
+					@Override
+					public void handleCallback() {
+						dimAnimation = new Animation(dim, (float)((double)obj.get("dim")), (float)((double)obj.get("duration")) );
+					}
+				}));
+			} else if(obj.containsKey("transitionScreen")) {
+				String target = (String) obj.get("transitionScreen");
+				switch(target.toLowerCase()) {
+					case "flightselect":
+						segments.add(new CallbackSegment(new CallbackHandler() {
+							@Override
+							public void handleCallback() {
+								puppetMaster.transitionScreen(new FlightSelectScreen(puppetMaster));
+							}
+						}));
+						break;
+					default:
+						throw new RuntimeException("request for transition to unknown screen");
+				}
+			} else if(obj.containsKey("acquaintance")) {
+				segments.add(new CallbackSegment(new CallbackHandler() {
+					@Override
+					public void handleCallback() {
+						AcquaintanceManager.SINGLETON.addAcquaintance((String)obj.get("acquaintance"));
+					}
+				}));
+			} else if(obj.containsKey("title")) {
+				segments.add(new MultipleChoiceSegment(puppetMaster, this, (String)obj.get("title"), (JSONArray)obj.get("buttons")));
+			} else if(obj.containsKey("acquaintancePoint")) {
+				segments.add(new CallbackSegment(new CallbackHandler() {
+					@Override
+					public void handleCallback() {
+						AcquaintanceManager.SINGLETON.addNewAcquaintancePoint((String)obj.get("actor"), (int)((long)obj.get("acquaintancePoint")));
+						puppetMaster.showAcquaintanceDialog((String)obj.get("actor"), (String)obj.get("message"));
+					}
+				}));
+			} else {
+				throw new RuntimeException("hit story node i do not recognize");
+			}
+		}
+		
+		Segment[] segmentArray = new Segment[segments.size()];
+		segmentArray = segments.toArray(segmentArray);
+		return segmentArray;
 	}
 
 	@Override

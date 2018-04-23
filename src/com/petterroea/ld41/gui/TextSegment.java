@@ -1,8 +1,10 @@
-package com.petterroea.ld41;
+package com.petterroea.ld41.gui;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+
+import com.petterroea.ld41.GamePuppetMaster;
 
 public class TextSegment implements Segment{
 	private static int msPerLetter = 25;
@@ -58,5 +60,11 @@ public class TextSegment implements Segment{
 	@Override
 	public boolean isAutomationSegment() {
 		return false;
+	}
+
+	@Override
+	public void mouseReleased() {
+		// TODO Auto-generated method stub
+		
 	}
 }
